@@ -40,7 +40,7 @@ function pac() {
 	fi
 }
 
-# Poor mans at
+# Poor man's at
 function startat() {
 	if [ $# -lt 2 ]; then
 		echo "Usage: $(basename $0) HH:MM:SS command"
