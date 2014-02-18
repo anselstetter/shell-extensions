@@ -1,6 +1,6 @@
 alias makepass="openssl rand -base64 32"
 alias please="sudo !!"
-alias remoteip="dig +short myip.opendns.com @resolver1.opendns.com"
+alias publicip="dig +short myip.opendns.com @resolver1.opendns.com"
 
 function unpac() {
 	if [ -f $1 ]; then
@@ -37,5 +37,25 @@ function pac() {
 			*.bz2) bzip2 "$2" > "$1"; shift ;;
 			*) echo Not a valid archive! ;;
 		esac
+	fi
+}
+
+# Poor mans at
+function startat() {
+	if [ $# -lt 2 ]; then
+		echo "Usage: $(basename $0) HH:MM:SS command"
+	else
+		CURRENTTIME=$(date +%s)
+		STARTTIME=$(date --date="$(date +"%b %d $1")" +%s)
+		DIFF=$(($STARTTIME - $CURRENTTIME))
+
+		if [ $DIFF -lt 0 ]; then
+			DIFF=$((86400+$DIFF))
+		fi
+		
+		echo $(echo "($(date +%H:%M:%S)) Starting \"$2\" in $(($DIFF / 3600 % 60)):$(($DIFF / 60 % 60)):$(($DIFF % 60))")
+
+		sleep $DIFF
+		$2
 	fi
 }
