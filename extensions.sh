@@ -48,14 +48,17 @@ function startat() {
 		CURRENTTIME=$(date +%s)
 		STARTTIME=$(date --date="$(date +"%b %d $1")" +%s)
 		DIFF=$(($STARTTIME - $CURRENTTIME))
+		ARRAY=($@)
+		LEN=${#ARRAY[@]}
+		ARGS=${ARRAY[@]:2:$LEN}
 
 		if [ $DIFF -lt 0 ]; then
 			DIFF=$((86400+$DIFF))
 		fi
 		
-		echo $(echo "($(date +%H:%M:%S)) Starting \"$2\" in $(($DIFF / 3600 % 60)):$(($DIFF / 60 % 60)):$(($DIFF % 60))")
+		echo $(echo "($(date +%H:%M:%S)) Starting $2 $ARGS in $(($DIFF / 3600 % 60)):$(($DIFF / 60 % 60)):$(($DIFF % 60))")
 
 		sleep $DIFF
-		$2
+		$2 $ARGS
 	fi
 }
