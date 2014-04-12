@@ -62,3 +62,22 @@ function startat() {
 		$2 $ARGS
 	fi
 }
+
+function cd() {
+	dir="${@:-$HOME}"  # ~ isn't expanded when in quotes
+	[ -z "${dir}" ] && dir=~
+	if ! builtin cd "$dir"
+	then
+		dir=$(compgen -d "${dir}" | head -1)
+		if builtin cd "$dir"
+		then
+			clear
+			pwd
+			ls -l
+		fi
+	else
+		clear
+		pwd
+		ls -l
+	fi
+}
